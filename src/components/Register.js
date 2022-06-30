@@ -114,7 +114,7 @@ const Register = () => {
           <h1>Register</h1>
           <form onSubmit={handleSubmit}>
             <label htmlFor='email'>
-              Username:
+              Email:
               <FontAwesomeIcon icon={faCheck} className={validEmail ? "valid" : "hide"} />
               <FontAwesomeIcon icon={faTimes} className={validEmail || !email ? "hide" : "invalid"} />
             </label>
@@ -158,7 +158,7 @@ const Register = () => {
             />
             <p
               id="pwdnote"
-              className={focusPwd && !validPwd ? "instructions" : "offscreen"}
+              className={focusPwd && pwd && !validPwd ? "instructions" : "offscreen"}
             >
               <FontAwesomeIcon icon={faInfoCircle} />
               8 to 24 characters.<br />
@@ -190,7 +190,7 @@ const Register = () => {
             />
             <p
               id="confirmnote"
-              className={focusMatchPwd && !validMatchPwd ? "instructions" : "offscreen"}
+              className={focusMatchPwd && matchPwd && !validMatchPwd ? "instructions" : "offscreen"}
             >
               <FontAwesomeIcon icon={faInfoCircle} />
               Must match the first password input field.
