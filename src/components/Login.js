@@ -13,7 +13,7 @@ import axios from 'axios';
 import consoleDebug, { RENDER } from '../hooks/useLogging';
 import useAuth from '../hooks/useAuth'
 
-const LOGIN_URL = "/api/user/login";
+const LOGIN_URL = "/api/users/login";
 
 const Login = () => {
   consoleDebug("Login is rendered ...", RENDER);

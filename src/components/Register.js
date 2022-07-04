@@ -12,7 +12,7 @@ import consoleDebug, { RENDER } from '../hooks/useLogging';
 
 // const USER_REGEX = /^[A-z][A-z0-9-_]{3, 23}$/;
 const EMAIL_REGEX = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/;
-const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8, 24}$/;
+const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
 const REGISTER_URL = "/api/users/register";
 
 const Register = () => {

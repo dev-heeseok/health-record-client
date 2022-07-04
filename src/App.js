@@ -6,7 +6,7 @@ import {
 
 import './App.css';
 import consoleDebug, { RENDER } from './hooks/useLogging';
-import { GEUST, MEMBER, ADMIN } from './hooks/useUser';
+import { GUEST, MEMBER, ADMIN } from './hooks/useUser';
 import RequireAuth from './components/RequireAuth';
 import Layout from './components/Layout';
 import Home from './components/Home';
