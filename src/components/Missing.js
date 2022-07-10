@@ -1,6 +1,6 @@
 import React from 'react';
 
-import consoleDebug, { RENDER } from '../hooks/useLogging';
+import consoleDebug, { RENDER } from '../hooks/useLogger';
 
 const Missing = () => {
   consoleDebug('Missing is rendered ...', RENDER);

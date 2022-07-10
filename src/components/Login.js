@@ -8,11 +8,12 @@ import {
   useLocation,
   useNavigate
 } from 'react-router-dom';
-import axios from 'axios';
 
-import consoleDebug, { RENDER } from '../hooks/useLogging';
+import axios, { axiosPrivate } from '../api/axios';
+import consoleDebug, { RENDER, REACT, consoleLog } from '../hooks/useLogger';
 import useAuth from '../hooks/useAuth'
 
+const USER_URL = "/api/users";
 const LOGIN_URL = "/api/users/login";
 
 const Login = () => {
@@ -23,7 +24,6 @@ const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
-  consoleDebug(`from ${from}`);
 
   const errMsgRef = useRef();
   const emailRef = useRef();
@@ -33,46 +33,57 @@ const Login = () => {
   const [pwd, setPwd] = useState("");
 
   useEffect(() => {
-    consoleDebug("email focus");
     emailRef.current?.focus();
   }, []);
   useEffect(() => {
-    consoleDebug("errMsg reset");
     setErrMsg("");
   }, [email, pwd]);
 
   const handleSubmit = async (e) => {
-    consoleDebug('onSubmit');
     e.preventDefault();
 
-    await axios
-      .post(LOGIN_URL, {
-        email: email,
-        password: pwd
-      })
-      .then(res => {
-        const accessToken = res?.data?.accessToken;
-        const roles = res?.data?.roles;
-
-        setAuth({ email, pwd, roles, accessToken });
-        setEmail("");
-        setPwd("");
-
-        navigate(from, { replace: true });
-      })
-      .catch(err => {
-        if (!err?.response) {
-          setErrMsg("No Server Response");
-        } else if (err?.response.status === 400) {
-          setErrMsg("Missing Email or Password");
-        } else if (err?.response.status === 401) {
-          setErrMsg("Unauthorized");
-        } else {
-          setErrMsg("Login Failed");
+    try {
+      const res = await axios.post(LOGIN_URL,
+        JSON.stringify(
+          {
+            email,
+            password: pwd
+          }),
+        {
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true
         }
+      );
 
-        errMsgRef.current?.focus();
-      });
+      consoleLog(JSON.stringify(res?.data));
+
+      const accessToken = res?.data?.accessToken;
+      const roles = res?.data?.roles;
+
+      consoleLog(accessToken);
+      consoleLog(roles);
+
+      setAuth({ accessToken, roles });
+      setEmail("");
+      setPwd("");
+
+      consoleLog(from);
+
+      navigate(from, { replace: true });
+
+    } catch (err) {
+      if (!err?.response) {
+        setErrMsg("No Server Response");
+      } else if (err?.response.status === 400) {
+        setErrMsg("Missing Email or Password");
+      } else if (err?.response.status === 401) {
+        setErrMsg("Unauthorized");
+      } else {
+        setErrMsg("Login Failed");
+      }
+
+      errMsgRef.current?.focus();
+    }
   }
 
   return (

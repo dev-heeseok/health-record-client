@@ -1,6 +1,6 @@
 import React from 'react';
 
-import consoleDebug, { RENDER } from '../hooks/useLogging';
+import consoleDebug, { RENDER } from '../hooks/useLogger';
 
 const Home = () => {
   consoleDebug('Home is rendered ...', RENDER);

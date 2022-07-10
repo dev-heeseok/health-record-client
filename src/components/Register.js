@@ -3,12 +3,12 @@ import React, {
   useState,
   useEffect
 } from 'react';
-import axios from 'axios';
+import axios from '../api/axios';
 import { Link } from 'react-router-dom';
 import { faCheck, faTimes, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import consoleDebug, { RENDER } from '../hooks/useLogging';
+import consoleDebug, { RENDER } from '../hooks/useLogger';
 
 // const USER_REGEX = /^[A-z][A-z0-9-_]{3, 23}$/;
 const EMAIL_REGEX = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/;
@@ -66,30 +66,35 @@ const Register = () => {
       return;
     }
 
-    await axios
-      .post(REGISTER_URL, {
-        email: email,
-        password: pwd
-      })
-      .then(res => {
-        const registered = res?.data?.success;
-        setSuccess(registered);
-
-        setEmail("");
-        setPwd("");
-        setMatchPwd("");
-      })
-      .catch(err => {
-        if (!err?.response) {
-          setErrMsg("No Server Response");
-        } else if (err.response?.status === 409) {
-          setErrMsg("Username Taken");
-        } else {
-          setErrMsg("Registeration Failed");
-        }
-
-        errMsgRef.current?.focus();
+    try {
+      // TODO. 임시로 email 이름을 username 으로 사용한다.
+      const username = email.split("@")[0];
+      const res = await axios.post(REGISTER_URL,
+        JSON.stringify({
+          username,
+          email,
+          password: pwd
+        }), {
+        headers: { 'Content-Type': 'application/json' },
+        withCredentials: true
       });
+
+      console.log(res?.data);
+      setSuccess(true);
+
+      setEmail("");
+      setPwd("");
+      setMatchPwd("");
+    } catch (err) {
+      if (!err?.response) {
+        setErrMsg("No Server Response");
+      } else if (err.response?.status === 409) {
+        setErrMsg("Username Taken");
+      } else {
+        setErrMsg("Registeration Failed");
+      }
+      errMsgRef.current?.focus();
+    }
   }
 
   return (

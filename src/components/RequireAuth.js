@@ -1,18 +1,21 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   Navigate,
   Outlet,
   useLocation
 } from 'react-router-dom';
 
-import consoleDebug, { RENDER } from '../hooks/useLogging'
+import { consoleInfo } from '../hooks/useLogger'
 import useAuth from '../hooks/useAuth';
 
 const RequireAuth = ({ allowedRoles }) => {
-  consoleDebug('RequireAuth is rendered ...', RENDER);
-
-  const { auth } = useAuth();
+  const { auth, setAuth } = useAuth();
   const location = useLocation();
+
+  useEffect(() => {
+    consoleInfo("RequireAuth useEffect");
+
+  }, []);
 
   return (
     auth.roles?.find(role => allowedRoles?.includes(role))

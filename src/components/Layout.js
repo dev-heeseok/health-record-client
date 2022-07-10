@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 
-import consoleDebug, { RENDER } from '../hooks/useLogging';
+import { consoleInfo } from '../hooks/useLogger';
 
 const Layout = () => {
-  consoleDebug('Layout is rendered ...', RENDER);
-  
+  useEffect(() => {
+    consoleInfo("Layout useEffect");
+
+  }, []);
+
   return (
     <main className='App'>
       <Outlet />
